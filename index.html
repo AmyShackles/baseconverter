@@ -71,6 +71,7 @@
                     solution.appendChild(newSolution);
                     numericInput.value = "";
                     radixInput.value = "";
+                    error.textContent = "";
                 } catch (err) {
                     const base = __newString(radix);
                     const str = __getString(convertStringRadix(number, base));
