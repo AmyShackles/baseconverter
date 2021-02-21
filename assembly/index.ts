@@ -1,9 +1,9 @@
 declare function log(n: i32): void
 
-export function convert(num: i32, base: i32): string {
+export function convert(num: u64, base: i32): string {
   return (num).toString(base);
 }
-export function convertStringRadix(num: i32, base: string): string {
+export function convertStringRadix(num: u64, base: string): string {
   if (base == "binary") 
       return num.toString(2);
   if (base == "ternary") 

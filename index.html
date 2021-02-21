@@ -44,31 +44,51 @@
         WL.wasm('/build/optimized.wasm')
             .then(instance => {
             const { convert, convertStringRadix, getRadix, __getString, __newString } = instance;
-            let number;
+            let number, radix;
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 number = numericInput.value;
+                radix = radixInput.value;
+                if (!isNaN(number) && ((number.length === 20 && +number[number.length - 1] > 5) || number.length > 20 || number <= 0)) {
+                    error.textContent = "Could not process request.  ";
+                        if (!isNaN(number) && ((number.length === 20 && +number[number.length - 1] > 5) || number.length > 20)) {
+                            error.textContent += "Number entered must be less than 18446744073709551616.  ";
+                        }
+                        if (!isNaN(number) && +number <= 0) {
+                            error.textContent += "Number entered must be greater than 0.  ";
+                        }
+                        if (isNaN(number)) {
+                            error.textContent += "Number entered must be a valid number.  ";
+                        }
+                        if (/^[3][7-9]|[4-9][0-9]|\d{3,}$/.test(radix) || (isNaN(radix) && ["binary", "ternary", "quaternary", "quinary", "senary", "septenary", "octal", "nonary", "decimal", "unadecimal", "duodecimal", "tridecimal", "tetradecimal", "pentadecimal", "hexadecimal", "heptadecimal", "octodecimal", "enneadecimal", "vigesimal", "unvigesimal", "duovigesimal", "trivigesimal", "tetravigesimal", "pentavigesimal", "hexavigesimal", "heptavigesimal", "octovigesimal", "enneavigesimal", "trigesimal", "untrigesimal", "duotrigesimal", "tritrigesimal", "tetratrigesimal", "pentatrigesimal", "hexatrigesimal"].includes(radix) === false)) {
+                            error.textContent += "Radix must be between 2 and 36."
+                        }
+                } else {
                 try {
-                    const radix = radixInput.value;
                     const str = __getString(convert(number, radix));
                     const newSolution = document.createElement("p");
-                    newSolution.textContent += number + " in base " + radix + " = " + str;
+                    newSolution.textContent += number + " in base " + radix + " = " + str.toUpperCase();
                     solution.appendChild(newSolution);
                     numericInput.value = "";
                     radixInput.value = "";
                 } catch (err) {
-                    const radix = radixInput.value;
                     const base = __newString(radix);
                     const str = __getString(convertStringRadix(number, base));
-                    if ((!isNaN(number)) && str !== "") {
+                    if ((!isNaN(number) && +number <= 18446744073709551615) && +number > 0 && str !== "") {
                         const newSolution = document.createElement("p");
-                        newSolution.textContent += number + " in " + radix + " = " + str;
+                        newSolution.textContent += number + " in " + radix + " = " + str.toUpperCase();
                         solution.appendChild(newSolution);
                         numericInput.value = "";
                         radixInput.value = "";
                         error.textContent = "";
                     } else {
                         error.textContent = "Could not process request.  ";
+                        if (!isNaN(number) && +number > 18446744073709551616) {
+                            error.textContent += "Number entered must be less than 18446744073709551616.  ";
+                        }
+                        if (!isNaN(number) && +number < 0) {
+                            error.textContent += "Number entered must be greater than 0.  ";
+                        }
                         if (isNaN(number)) {
                             error.textContent += "Number entered must be a valid number.  ";
                         }
@@ -77,6 +97,7 @@
                         }
                     }
                 }
+            }
             })
         });
     </script>
