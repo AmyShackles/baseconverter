@@ -60,7 +60,7 @@
                         if (isNaN(number)) {
                             error.textContent += "Number entered must be a valid number.  ";
                         }
-                        if (/^[3][7-9]|[4-9][0-9]|\d{3,}$/.test(radix) || (isNaN(radix) && ["binary", "ternary", "quaternary", "quinary", "senary", "septenary", "octal", "nonary", "decimal", "unadecimal", "duodecimal", "tridecimal", "tetradecimal", "pentadecimal", "hexadecimal", "heptadecimal", "octodecimal", "enneadecimal", "vigesimal", "unvigesimal", "duovigesimal", "trivigesimal", "tetravigesimal", "pentavigesimal", "hexavigesimal", "heptavigesimal", "octovigesimal", "enneavigesimal", "trigesimal", "untrigesimal", "duotrigesimal", "tritrigesimal", "tetratrigesimal", "pentatrigesimal", "hexatrigesimal"].includes(radix) === false)) {
+                        if (radix < 2 || /^[3][7-9]|[4-9][0-9]|\d{3,}$/.test(radix) || (isNaN(radix) && ["binary", "ternary", "quaternary", "quinary", "senary", "septenary", "octal", "nonary", "decimal", "unadecimal", "duodecimal", "tridecimal", "tetradecimal", "pentadecimal", "hexadecimal", "heptadecimal", "octodecimal", "enneadecimal", "vigesimal", "unvigesimal", "duovigesimal", "trivigesimal", "tetravigesimal", "pentavigesimal", "hexavigesimal", "heptavigesimal", "octovigesimal", "enneavigesimal", "trigesimal", "untrigesimal", "duotrigesimal", "tritrigesimal", "tetratrigesimal", "pentatrigesimal", "hexatrigesimal"].includes(radix) === false)) {
                             error.textContent += "Radix must be between 2 and 36."
                         }
                 } else {
