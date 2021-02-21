@@ -1,0 +1,74 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<body>
+    <div id="main">
+        <h1>Convert numbers to different bases</h1>
+        <p>To enter a number in binary, preface with '0b', eg: 0x10101</p>
+        <p>To enter a number in octal, preface with '0o', eg: 0o51</p>
+        <p>To enter a number in hexadecimal, preface with '0x'</p>
+        <p><span title="Options include: binary, ternary, quaternary, quinary, senary, septenary, octal, nonary, decimal, unadecimal, duodecimal, tridecimal, tetradecimal, pentadecimal, hexadecimal, heptadecimal, octodecimal, enneadecimal, vigesimal, unvigesimal, duovigesimal, trivigesimal, tetravigesimal, pentavigesimal, hexavigesimal, heptavigesimal, octovigesimal, enneavigesimal, trigesimal, untrigesimal, duotrigesimal, tritrigesimal, tetratrigesimal, pentatrigesimal, hexatrigesimal">Radix can be any number between 2 and 36 or the name for that base system.</span>
+        </p>
+        <form id="baseConverter">
+        <label>Number
+            <input id="number"/>
+        </label>
+        <label>Radix
+            <input id="radix"/>
+        </label>
+        <button id="convertButton">Convert!</button>
+        </form>
+        <div id="solution"></div>
+        <div id="error"></div>
+    </div>
+    <script src=/js/loader.js></script>
+    <script src="https://cdn.jsdelivr.net/npm/@assemblyscript/loader/umd/index.js"></script>
+
+    <script>
+        const numericInput = document.getElementById("number");
+        const radixInput = document.getElementById("radix");
+        const form = document.getElementById("baseConverter");
+        const solution = document.getElementById("solution");
+        const error = document.getElementById("error");
+        const WL = new WasmLoader();
+        WL.wasm('/build/optimized.wasm')
+            .then(instance => {
+            const { convert, convertStringRadix, getRadix, __getString, __newString } = instance;
+            let number;
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                number = numericInput.value;
+                try {
+                    const radix = radixInput.value;
+                    const str = __getString(convert(number, radix));
+                    const newSolution = document.createElement("p");
+                    newSolution.textContent += number + " in base " + radix + " = " + str;
+                    solution.appendChild(newSolution);
+                    numericInput.value = "";
+                    radixInput.value = "";
+                } catch (err) {
+                    const radix = radixInput.value;
+                    const base = __newString(radix);
+                    const str = __getString(convertStringRadix(number, base));
+                    if ((!isNaN(number)) && str !== "") {
+                        const newSolution = document.createElement("p");
+                        newSolution.textContent += number + " in " + radix + " = " + str;
+                        solution.appendChild(newSolution);
+                        numericInput.value = "";
+                        radixInput.value = "";
+                        error.textContent = "";
+                    } else {
+                        error.textContent = "Could not process request.  ";
+                        if (isNaN(number)) {
+                            error.textContent += "Number entered must be a valid number.  ";
+                        }
+                        if (!["binary", "ternary", "quaternary", "quinary", "senary", "septenary", "octal", "nonary", "decimal", "unadecimal", "duodecimal", "tridecimal", "tetradecimal", "pentadecimal", "hexadecimal", "heptadecimal", "octodecimal", "enneadecimal", "vigesimal", "unvigesimal", "duovigesimal", "trivigesimal", "tetravigesimal", "pentavigesimal", "hexavigesimal", "heptavigesimal", "octovigesimal", "enneavigesimal", "trigesimal", "untrigesimal", "duotrigesimal", "tritrigesimal", "tetratrigesimal", "pentatrigesimal", "hexatrigesimal"].includes(radix)) {
+                            error.textContent += "Radix must be between 2 and 36."
+                        }
+                    }
+                }
+            })
+        });
+    </script>
+</body>
+</html>
