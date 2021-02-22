@@ -41,12 +41,11 @@
             <p><span title="Options include: binary, ternary, quaternary, quinary, senary, septenary, octal, nonary, decimal, unadecimal, duodecimal, tridecimal, tetradecimal, pentadecimal, hexadecimal, heptadecimal, octodecimal, enneadecimal, vigesimal, unvigesimal, duovigesimal, trivigesimal, tetravigesimal, pentavigesimal, hexavigesimal, heptavigesimal, octovigesimal, enneavigesimal, trigesimal, untrigesimal, duotrigesimal, tritrigesimal, tetratrigesimal, pentatrigesimal, hexatrigesimal">Radix can be any number between 2 and 36 or the name for that base system.</span>
             </p>
             <form id="baseConverter">
-            <label>Number
+            <label for="number">Number</label>
                 <input id="number"/>
-            </label>
-            <label>Radix
+            
+            <label for="radix">Radix</label>
                 <input id="radix"/>
-            </label>
             <button id="convertButton">Convert!</button>
             </form>
             <div id="solution"></div>
@@ -172,25 +171,27 @@
                     wasmFeatureDetect.bigInt().then(bigIntSupported => {
                         /* Safari does not support BigInt, so special case to only allow up to 0xFFFFFFFF */
                         if (bigIntSupported) {
-                            if (!isNaN(number) && ((number.length === 20 && +number[number.length - 1] > 5) || number.length > 20 || number <= 0)) {
+                            if ((!isNaN(number) && ((number.length === 20 && +number[number.length - 1] > 5) || number.length > 20 || number <= 0)) || isNaN(number)) {
                                 error.textContent = "Could not process request.  ";
-                                    if (!isNaN(number) && ((number.length === 20 && +number[number.length - 1] > 5) || number.length > 20)) {
-                                        error.textContent += "Number entered must be less than 18446744073709551616.  ";
-                                    }
-                                    if (!isNaN(number) && +number <= 0) {
-                                        error.textContent += "Number entered must be greater than 0.  ";
-                                    }
-                                    if (isNaN(number)) {
-                                        error.textContent += "Number entered must be a valid number.  ";
-                                    }
-                                    if (radix < 2 || /^[3][7-9]|[4-9][0-9]|\d{3,}$/.test(radix) || (isNaN(radix) && ["binary", "ternary", "quaternary", "quinary", "senary", "septenary", "octal", "nonary", "decimal", "unadecimal", "duodecimal", "tridecimal", "tetradecimal", "pentadecimal", "hexadecimal", "heptadecimal", "octodecimal", "enneadecimal", "vigesimal", "unvigesimal", "duovigesimal", "trivigesimal", "tetravigesimal", "pentavigesimal", "hexavigesimal", "heptavigesimal", "octovigesimal", "enneavigesimal", "trigesimal", "untrigesimal", "duotrigesimal", "tritrigesimal", "tetratrigesimal", "pentatrigesimal", "hexatrigesimal"].includes(radix) === false)) {
-                                        error.textContent += "Radix must be between 2 and 36."
-                                    }
+                                if (!isNaN(number) && ((number.length === 20 && +number[number.length - 1] > 5) || number.length > 20)) {
+                                    error.textContent += "Number entered must be less than 18446744073709551616.  ";
+                                }
+                                if (!isNaN(number) && +number <= 0) {
+                                    error.textContent += "Number entered must be greater than 0.  ";
+                                }
+                                if (isNaN(number)) {
+                                    error.textContent += "Number entered must be a valid number.  ";
+                                }
+                                if (radix < 2 || /^[3][7-9]|[4-9][0-9]|\d{3,}$/.test(radix) || (isNaN(radix) && ["binary", "ternary", "quaternary", "quinary", "senary", "septenary", "octal", "nonary", "decimal", "unadecimal", "duodecimal", "tridecimal", "tetradecimal", "pentadecimal", "hexadecimal", "heptadecimal", "octodecimal", "enneadecimal", "vigesimal", "unvigesimal", "duovigesimal", "trivigesimal", "tetravigesimal", "pentavigesimal", "hexavigesimal", "heptavigesimal", "octovigesimal", "enneavigesimal", "trigesimal", "untrigesimal", "duotrigesimal", "tritrigesimal", "tetratrigesimal", "pentatrigesimal", "hexatrigesimal"].includes(radix) === false)) {
+                                    error.textContent += "Radix must be between 2 and 36."
+                                }
+                                error.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
                             } else {
                                 try {
                                     const str = __getString(convert(number, radix));
                                     const newSolution = document.createElement("p");
                                     newSolution.textContent += number + " in base " + radix + " = " + str.toUpperCase();
+                                    newSolution.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
                                     solution.appendChild(newSolution);
                                     numericInput.value = "";
                                     radixInput.value = "";
@@ -202,6 +203,7 @@
                                     if (str !== "") {
                                         const newSolution = document.createElement("p");
                                         newSolution.textContent += number + " in " + radix + " = " + str.toUpperCase();
+                                        newSolution.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
                                         solution.appendChild(newSolution);
                                         numericInput.value = "";
                                         radixInput.value = "";
@@ -210,12 +212,13 @@
                                         error.textContent = "Could not process request.  ";
                                         if (!["binary", "ternary", "quaternary", "quinary", "senary", "septenary", "octal", "nonary", "decimal", "unadecimal", "duodecimal", "tridecimal", "tetradecimal", "pentadecimal", "hexadecimal", "heptadecimal", "octodecimal", "enneadecimal", "vigesimal", "unvigesimal", "duovigesimal", "trivigesimal", "tetravigesimal", "pentavigesimal", "hexavigesimal", "heptavigesimal", "octovigesimal", "enneavigesimal", "trigesimal", "untrigesimal", "duotrigesimal", "tritrigesimal", "tetratrigesimal", "pentatrigesimal", "hexatrigesimal"].includes(radix)) {
                                             error.textContent += "Radix must be between 2 and 36."
+                                            error.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
                                         }
                                     }
                                 }
                             }
                         } else {
-                            if (!isNaN(number) && ((number.length === 10 && +number[number.length - 1] > 5) || number.length > 10 || number <= 0)) {
+                            if ((!isNaN(number) && ((number.length === 10 && +number[number.length - 1] > 5) || number.length > 10 || number <= 0)) || isNaN(number)) {
                                 error.textContent = "Could not process request.  ";
                                     if (!isNaN(number) && ((number.length === 10 && +number[number.length - 1] > 5) || number.length > 10)) {
                                         error.textContent += "Number entered must be less than 4294967296.  ";
