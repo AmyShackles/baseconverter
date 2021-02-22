@@ -197,7 +197,6 @@
                                     radixInput.value = "";
                                     error.textContent = "";
                                 } catch (err) {
-                                    console.log('Error', err);
                                     const base = __newString(radix.toLowerCase());
                                     const str = __getString(convertStringRadix(number, base));
                                     if (str !== "") {
@@ -244,7 +243,6 @@
                                     radixInput.value = "";
                                     error.textContent = "";
                                 } catch (err) {
-                                    console.log('Error', err);
                                     const base = __newString(radix.toLowerCase());
                                     const str = __getString(convertStringRadix32(number, base));
                                     if (str !== "") {
