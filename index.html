@@ -232,11 +232,13 @@
                                     if (radix < 2 || /^[3][7-9]|[4-9][0-9]|\d{3,}$/.test(radix) || (isNaN(radix) && ["binary", "ternary", "quaternary", "quinary", "senary", "septenary", "octal", "nonary", "decimal", "unadecimal", "duodecimal", "tridecimal", "tetradecimal", "pentadecimal", "hexadecimal", "heptadecimal", "octodecimal", "enneadecimal", "vigesimal", "unvigesimal", "duovigesimal", "trivigesimal", "tetravigesimal", "pentavigesimal", "hexavigesimal", "heptavigesimal", "octovigesimal", "enneavigesimal", "trigesimal", "untrigesimal", "duotrigesimal", "tritrigesimal", "tetratrigesimal", "pentatrigesimal", "hexatrigesimal"].includes(radix) === false)) {
                                         error.textContent += "Radix must be between 2 and 36."
                                     }
+                                    error.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
                             } else {
                                 try {
                                     const str = __getString(convert32(number, radix));
                                     const newSolution = document.createElement("p");
                                     newSolution.textContent += number + " in base " + radix + " = " + str.toUpperCase();
+                                    newSolution.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
                                     solution.appendChild(newSolution);
                                     numericInput.value = "";
                                     radixInput.value = "";
@@ -248,6 +250,7 @@
                                     if (str !== "") {
                                         const newSolution = document.createElement("p");
                                         newSolution.textContent += number + " in " + radix + " = " + str.toUpperCase();
+                                        newSolution.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
                                         solution.appendChild(newSolution);
                                         numericInput.value = "";
                                         radixInput.value = "";
@@ -257,6 +260,7 @@
                                         if (!["binary", "ternary", "quaternary", "quinary", "senary", "septenary", "octal", "nonary", "decimal", "unadecimal", "duodecimal", "tridecimal", "tetradecimal", "pentadecimal", "hexadecimal", "heptadecimal", "octodecimal", "enneadecimal", "vigesimal", "unvigesimal", "duovigesimal", "trivigesimal", "tetravigesimal", "pentavigesimal", "hexavigesimal", "heptavigesimal", "octovigesimal", "enneavigesimal", "trigesimal", "untrigesimal", "duotrigesimal", "tritrigesimal", "tetratrigesimal", "pentatrigesimal", "hexatrigesimal"].includes(radix)) {
                                             error.textContent += "Radix must be between 2 and 36."
                                         }
+                                        error.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
                                     }
                                 }
                             }
