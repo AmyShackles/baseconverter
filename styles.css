@@ -1,11 +1,23 @@
 #colors {
     display: flex;
+    justify-content: center;
+}
+#program {
+    text-align: center;
 }
 form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+p, label, legend, input, button {
+    font-size: 1.25rem;
+}
 form input {
-    width: 80%;
+    margin: 15px;
+}
+fieldset {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

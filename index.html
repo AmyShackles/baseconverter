@@ -15,141 +15,99 @@
     <body>
         <div id="main">
             <div id="colors">
-            <fieldset>
-                <legend>Create your own background color</legend>
-                <label>Red
-                <input id="red" type="range" min=0 max=255 step=1></input></label>
-                <label>Green
-                <input id="green" type="range" min=0 max=255 step=1></input></label>
-                <label>Blue
-                <input id="blue" type="range" min=0 max=255 step=1></input></label>
-            </fieldset>
-            <fieldset>
-                <legend>Create your own text color</legend>
-                <label>Red
-                <input id="redText" type="range" min=0 max=255 step=1></input></label>
-                <label>Green
-                <input id="greenText" type="range" min=0 max=255 step=1></input></label>
-                <label>Blue
-                <input id="blueText" type="range" min=0 max=255 step=1></input></label>
-            </fieldset>
+                <fieldset>
+                    <legend>Choose a background color</legend>
+                    <input type="color" id="backgroundColor"/>
+                    <label for="backgroundColor" id="backgroundLabel"></label>
+                </fieldset>
+                <fieldset>
+                    <legend>Choose a text color</legend>
+                    <input type="color" id="color"/>
+                    <label for="color" id="colorLabel"></label>
+                </fieldset>
             </div>
-            <h1>Convert numbers to different bases</h1>
-            <p>To enter a number in binary, preface with '0b', eg: 0x10101</p>
-            <p>To enter a number in octal, preface with '0o', eg: 0o51</p>
-            <p>To enter a number in hexadecimal, preface with '0x'</p>
-            <p><span title="Options include: binary, ternary, quaternary, quinary, senary, septenary, octal, nonary, decimal, unadecimal, duodecimal, tridecimal, tetradecimal, pentadecimal, hexadecimal, heptadecimal, octodecimal, enneadecimal, vigesimal, unvigesimal, duovigesimal, trivigesimal, tetravigesimal, pentavigesimal, hexavigesimal, heptavigesimal, octovigesimal, enneavigesimal, trigesimal, untrigesimal, duotrigesimal, tritrigesimal, tetratrigesimal, pentatrigesimal, hexatrigesimal">Radix can be any number between 2 and 36 or the name for that base system.</span>
-            </p>
-            <form id="baseConverter">
-            <label for="number">Number</label>
-                <input id="number"/>
-            
-            <label for="radix">Radix</label>
-                <input id="radix"/>
-            <button id="convertButton">Convert!</button>
-            </form>
-            <div id="solution"></div>
-            <div id="error"></div>
+            <div id="program">
+                <h1>Convert numbers to different bases</h1>
+                <p>To enter a number in binary, preface with '0b', eg: 0b10101</p>
+                <p>To enter a number in octal, preface with '0o', eg: 0o51</p>
+                <p>To enter a number in hexadecimal, preface with '0x', eg: 0x1FF</p>
+                <p><span title="Options include: binary, ternary, quaternary, quinary, senary, septenary, octal, nonary, decimal, unadecimal, duodecimal, tridecimal, tetradecimal, pentadecimal, hexadecimal, heptadecimal, octodecimal, enneadecimal, vigesimal, unvigesimal, duovigesimal, trivigesimal, tetravigesimal, pentavigesimal, hexavigesimal, heptavigesimal, octovigesimal, enneavigesimal, trigesimal, untrigesimal, duotrigesimal, tritrigesimal, tetratrigesimal, pentatrigesimal, hexatrigesimal">Radix can be any number between 2 and 36 or the name for that base system.</span>
+                </p>
+                <form id="baseConverter">
+                <label for="number">Number</label>
+                    <input id="number" type="text"/>
+                
+                <label for="radix">Radix</label>
+                    <input id="radix" type="text" />
+                <button id="convertButton">Convert!</button>
+                </form>
+                <div id="solution"></div>
+                <div id="error"></div>
+            </div>
         </div>
         <script src=/js/loader.js></script>
         <script src="https://cdn.jsdelivr.net/npm/@assemblyscript/loader/umd/index.js"></script>
         <script src="https://unpkg.com/wasm-feature-detect/dist/umd/index.js"></script>
         <script>
             // Background color start
-            const redRange = document.getElementById("red");
-            const greenRange = document.getElementById("green");
-            const blueRange = document.getElementById("blue");
-            if (localStorage.getItem("red")) {
-                redRange.value = localStorage.getItem("red");
+            const backgroundColor = document.getElementById("backgroundColor");
+            const backgroundLabel = document.getElementById("backgroundLabel");
+            if (localStorage.getItem("backgroundColor")) {
+                backgroundColor.value = localStorage.getItem("backgroundColor");
             } else {
-                redRange.value = 0;
-                localStorage.setItem("red", 0);
+                backgroundColor.value = "#fff";
+                localStorage.setItem("backgroundColor", "#fff");
             }
-            if (localStorage.getItem("green")) {
-                greenRange.value = localStorage.getItem("green");
-            } else {
-                greenRange.value = 0;
-                localStorage.setItem("green", 0);
-            }
-            if (localStorage.getItem("blue")) {
-                blueRange.value = localStorage.getItem("blue");
-            } else {
-                blueRange.value = 0;
-                localStorage.setItem("blue", 0);
-            }
-            document.body.style.backgroundColor = `rgb(${redRange.value},${greenRange.value},${blueRange.value})`;
-            redRange.addEventListener('change', (e) => {
-                localStorage.setItem("red", e.target.value);
-                const color = `rgb(${e.target.value},${greenRange.value},${blueRange.value})`;
-                localStorage.setItem("backgroundColor", color);
-                document.body.style.backgroundColor = color;
-            })
-            greenRange.addEventListener('change', (e) => {
-                localStorage.setItem("green", e.target.value);
-                const color = `rgb(${redRange.value},${e.target.value},${blueRange.value})`;
-                localStorage.setItem("backgroundColor", color);
-                document.body.style.backgroundColor = color;
-            });
-            blueRange.addEventListener('change', (e) => {
-                localStorage.setItem("blue", e.target.value);
-                const color = `rgb(${redRange.value},${greenRange.value},${e.target.value})`;
-                localStorage.setItem("backgroundColor", color);
-                document.body.style.backgroundColor = color;
+            document.body.style.backgroundColor = backgroundColor.value;
+            document.getElementById("number").style.backgroundColor = backgroundColor.value;
+            document.getElementById("number").style.filter = "hue-rotate(10deg)";
+            document.getElementById("number").style.color = localStorage.getItem("color");
+            document.getElementById("radix").style.backgroundColor = backgroundColor.value;
+            document.getElementById("radix").style.filter = "hue-rotate(10deg)";
+            document.getElementById("radix").style.color = localStorage.getItem("color");
+            document.getElementById("convertButton").style.background = localStorage.getItem("backgroundColor");
+            document.getElementById("convertButton").style.color = localStorage.getItem("color");
+            document.getElementById("convertButton").style.filter = "contrast(200%)";
+            backgroundLabel.innerText = localStorage.getItem("backgroundColor").toUpperCase();
+            backgroundColor.addEventListener('change', (e) => {
+                localStorage.setItem("backgroundColor", e.target.value);
+                document.body.style.backgroundColor = e.target.value;
+                backgroundLabel.innerText = e.target.value.toUpperCase();
+                document.getElementById("number").style.backgroundColor = e.target.value;
+                document.getElementById("number").style.filter = "hue-rotate(10deg)";
+                document.getElementById("radix").style.backgroundColor = e.target.value;
+                document.getElementById("radix").style.filter = "hue-rotate(10deg)";
+                document.getElementById("convertButton").style.background = localStorage.getItem("backgroundColor");
+                document.getElementById("convertButton").style.color = localStorage.getItem("color");
+                document.getElementById("convertButton").style.filter = "contrast(200%)";
             })
             // Background color end
             // Text color start
-            const redRangeText = document.getElementById("redText");
-            const greenRangeText = document.getElementById("greenText");
-            const blueRangeText = document.getElementById("blueText");
-            if (localStorage.getItem("redText")) {
-                redRangeText.value = localStorage.getItem("redText");
+            const color = document.getElementById("color");
+            const colorLabel = document.getElementById("colorLabel");
+            if (localStorage.getItem("color")) {
+                color.value = localStorage.getItem("color");
             } else {
-                redRangeText.value = 255;
-                localStorage.setItem("redText", 255);
+                color.value = "#000"
+                localStorage.setItem("color", "#000");
             }
-            if (localStorage.getItem("greenText")) {
-                greenRangeText.value = localStorage.getItem("greenText");
-            } else {
-                greenRangeText.value = 255;
-                localStorage.setItem("greenText", 255);
-            }
-            if (localStorage.getItem("blueText")) {
-                blueRangeText.value = localStorage.getItem("blueText");
-            } else {
-                blueRangeText.value = 255;
-                localStorage.setItem("blueText", 255);
-            }
-            [...document.querySelectorAll('p')].forEach(p => p.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`);
-            [...document.querySelectorAll("legend")].forEach(legend => legend.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`);
-            [...document.querySelectorAll("label")].forEach(label => label.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`);
-            document.querySelector("h1").style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
-            redRangeText.addEventListener('change', (e) => {
-                localStorage.setItem("redText", e.target.value);
-                const color = `rgb(${e.target.value},${greenRangeText.value},${blueRangeText.value})`;
-                localStorage.setItem("color", color);
-                [...document.querySelectorAll('p')].forEach(p => p.style.color = color);
-                [...document.querySelectorAll("legend")].forEach(legend => legend.style.color = color);
-                [...document.querySelectorAll("label")].forEach(label => label.style.color = color);
-                document.querySelector("h1").style.color = color;
-            })
-            greenRangeText.addEventListener('change', (e) => {
-                localStorage.setItem("greenText", e.target.value);
-                const color = `rgb(${redRangeText.value},${e.target.value},${blueRangeText.value})`;
-                localStorage.setItem("color", color);
-                [...document.querySelectorAll('p')].forEach(p => p.style.color = color);
-                [...document.querySelectorAll("legend")].forEach(legend => legend.style.color = color);
-                [...document.querySelectorAll("label")].forEach(label => label.style.color = color);
-                document.querySelector("h1").style.color = color;
-            });
-            blueRangeText.addEventListener('change', (e) => {
-                localStorage.setItem("blueText", e.target.value);
-                const color = `rgb(${redRangeText.value},${greenRangeText.value},${e.target.value})`;
-                localStorage.setItem("color", color);
-                [...document.querySelectorAll('p')].forEach(p => p.style.color = color);
-                [...document.querySelectorAll("legend")].forEach(legend => legend.style.color = color);
-                [...document.querySelectorAll("label")].forEach(label => label.style.color = color);
-                document.querySelector("h1").style.color = color;
-
+            [...document.querySelectorAll('p')].forEach(p => p.style.color = localStorage.getItem("color").toUpperCase());
+            [...document.querySelectorAll("legend")].forEach(legend => legend.style.color = localStorage.getItem("color").toUpperCase());
+            [...document.querySelectorAll("label")].forEach(label => label.style.color = localStorage.getItem("color").toUpperCase());
+            document.querySelector("h1").style.color = localStorage.getItem("color").toUpperCase();
+            colorLabel.innerText = localStorage.getItem("color").toUpperCase();
+            color.addEventListener('change', (e) => {
+                localStorage.setItem("color", e.target.value);
+                [...document.querySelectorAll('p')].forEach(p => p.style.color = e.target.value);
+                [...document.querySelectorAll("legend")].forEach(legend => legend.style.color = e.target.value);
+                [...document.querySelectorAll("label")].forEach(label => label.style.color = e.target.value);
+                document.querySelector("h1").style.color = e.target.value;
+                document.getElementById("number").style.color = e.target.value;
+                document.getElementById("radix").style.color = e.target.value;
+                colorLabel.innerText = e.target.value.toUpperCase();
+                document.getElementById("convertButton").style.background = localStorage.getItem("backgroundColor");
+                document.getElementById("convertButton").style.color = localStorage.getItem("color");
+                document.getElementById("convertButton").style.filter = "contrast(200%)";
             })
             // Text color end
         </script>
@@ -185,13 +143,13 @@
                                 if (radix < 2 || /^[3][7-9]|[4-9][0-9]|\d{3,}$/.test(radix) || (isNaN(radix) && ["binary", "ternary", "quaternary", "quinary", "senary", "septenary", "octal", "nonary", "decimal", "unadecimal", "duodecimal", "tridecimal", "tetradecimal", "pentadecimal", "hexadecimal", "heptadecimal", "octodecimal", "enneadecimal", "vigesimal", "unvigesimal", "duovigesimal", "trivigesimal", "tetravigesimal", "pentavigesimal", "hexavigesimal", "heptavigesimal", "octovigesimal", "enneavigesimal", "trigesimal", "untrigesimal", "duotrigesimal", "tritrigesimal", "tetratrigesimal", "pentatrigesimal", "hexatrigesimal"].includes(radix) === false)) {
                                     error.textContent += "Radix must be between 2 and 36."
                                 }
-                                error.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
+                                error.style.color = localStorage.getItem("color");
                             } else {
                                 try {
                                     const str = __getString(convert(number, radix));
                                     const newSolution = document.createElement("p");
                                     newSolution.textContent += number + " in base " + radix + " = " + str.toUpperCase();
-                                    newSolution.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
+                                    newSolution.style.color = localStorage.getItem("color");
                                     solution.appendChild(newSolution);
                                     numericInput.value = "";
                                     radixInput.value = "";
@@ -202,7 +160,7 @@
                                     if (str !== "") {
                                         const newSolution = document.createElement("p");
                                         newSolution.textContent += number + " in " + radix + " = " + str.toUpperCase();
-                                        newSolution.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
+                                        newSolution.style.color = localStorage.getItem("color");
                                         solution.appendChild(newSolution);
                                         numericInput.value = "";
                                         radixInput.value = "";
@@ -211,7 +169,7 @@
                                         error.textContent = "Could not process request.  ";
                                         if (!["binary", "ternary", "quaternary", "quinary", "senary", "septenary", "octal", "nonary", "decimal", "unadecimal", "duodecimal", "tridecimal", "tetradecimal", "pentadecimal", "hexadecimal", "heptadecimal", "octodecimal", "enneadecimal", "vigesimal", "unvigesimal", "duovigesimal", "trivigesimal", "tetravigesimal", "pentavigesimal", "hexavigesimal", "heptavigesimal", "octovigesimal", "enneavigesimal", "trigesimal", "untrigesimal", "duotrigesimal", "tritrigesimal", "tetratrigesimal", "pentatrigesimal", "hexatrigesimal"].includes(radix)) {
                                             error.textContent += "Radix must be between 2 and 36."
-                                            error.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
+                                            error.style.color = localStorage.getItem("color");
                                         }
                                     }
                                 }
@@ -231,13 +189,13 @@
                                     if (radix < 2 || /^[3][7-9]|[4-9][0-9]|\d{3,}$/.test(radix) || (isNaN(radix) && ["binary", "ternary", "quaternary", "quinary", "senary", "septenary", "octal", "nonary", "decimal", "unadecimal", "duodecimal", "tridecimal", "tetradecimal", "pentadecimal", "hexadecimal", "heptadecimal", "octodecimal", "enneadecimal", "vigesimal", "unvigesimal", "duovigesimal", "trivigesimal", "tetravigesimal", "pentavigesimal", "hexavigesimal", "heptavigesimal", "octovigesimal", "enneavigesimal", "trigesimal", "untrigesimal", "duotrigesimal", "tritrigesimal", "tetratrigesimal", "pentatrigesimal", "hexatrigesimal"].includes(radix) === false)) {
                                         error.textContent += "Radix must be between 2 and 36."
                                     }
-                                    error.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
+                                    error.style.color = localStorage.getItem("color");
                             } else {
                                 try {
                                     const str = __getString(convert32(number, radix));
                                     const newSolution = document.createElement("p");
                                     newSolution.textContent += number + " in base " + radix + " = " + str.toUpperCase();
-                                    newSolution.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
+                                    newSolution.style.color = localStorage.getItem("color");
                                     solution.appendChild(newSolution);
                                     numericInput.value = "";
                                     radixInput.value = "";
@@ -248,7 +206,7 @@
                                     if (str !== "") {
                                         const newSolution = document.createElement("p");
                                         newSolution.textContent += number + " in " + radix + " = " + str.toUpperCase();
-                                        newSolution.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
+                                        newSolution.style.color = localStorage.getItem("color");
                                         solution.appendChild(newSolution);
                                         numericInput.value = "";
                                         radixInput.value = "";
@@ -258,7 +216,7 @@
                                         if (!["binary", "ternary", "quaternary", "quinary", "senary", "septenary", "octal", "nonary", "decimal", "unadecimal", "duodecimal", "tridecimal", "tetradecimal", "pentadecimal", "hexadecimal", "heptadecimal", "octodecimal", "enneadecimal", "vigesimal", "unvigesimal", "duovigesimal", "trivigesimal", "tetravigesimal", "pentavigesimal", "hexavigesimal", "heptavigesimal", "octovigesimal", "enneavigesimal", "trigesimal", "untrigesimal", "duotrigesimal", "tritrigesimal", "tetratrigesimal", "pentatrigesimal", "hexatrigesimal"].includes(radix)) {
                                             error.textContent += "Radix must be between 2 and 36."
                                         }
-                                        error.style.color = `rgb(${redRangeText.value},${greenRangeText.value},${blueRangeText.value})`;
+                                        error.style.color = localStorage.getItem("color");
                                     }
                                 }
                             }
