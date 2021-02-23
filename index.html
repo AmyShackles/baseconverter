@@ -55,10 +55,10 @@
             if (localStorage.getItem("backgroundColor")) {
                 backgroundColor.value = localStorage.getItem("backgroundColor");
             } else {
-                backgroundColor.value = "#fff";
-                localStorage.setItem("backgroundColor", "#fff");
+                backgroundColor.value = "#ffffff";
+                localStorage.setItem("backgroundColor", "#ffffff");
             }
-            document.body.style.backgroundColor = backgroundColor.value;
+            document.body.style.backgroundColor = localStorage.getItem("backgroundColor");
             document.getElementById("number").style.backgroundColor = backgroundColor.value;
             document.getElementById("number").style.filter = "hue-rotate(10deg)";
             document.getElementById("number").style.color = localStorage.getItem("color");
@@ -78,8 +78,6 @@
                 document.getElementById("radix").style.backgroundColor = e.target.value;
                 document.getElementById("radix").style.filter = "hue-rotate(10deg)";
                 document.getElementById("convertButton").style.background = localStorage.getItem("backgroundColor");
-                document.getElementById("convertButton").style.color = localStorage.getItem("color");
-                document.getElementById("convertButton").style.filter = "contrast(200%)";
             })
             // Background color end
             // Text color start
@@ -88,13 +86,13 @@
             if (localStorage.getItem("color")) {
                 color.value = localStorage.getItem("color");
             } else {
-                color.value = "#000"
-                localStorage.setItem("color", "#000");
+                color.value = "#000000"
+                localStorage.setItem("color", "#000000");
             }
-            [...document.querySelectorAll('p')].forEach(p => p.style.color = localStorage.getItem("color").toUpperCase());
-            [...document.querySelectorAll("legend")].forEach(legend => legend.style.color = localStorage.getItem("color").toUpperCase());
-            [...document.querySelectorAll("label")].forEach(label => label.style.color = localStorage.getItem("color").toUpperCase());
-            document.querySelector("h1").style.color = localStorage.getItem("color").toUpperCase();
+            [...document.querySelectorAll('p')].forEach(p => p.style.color = localStorage.getItem("color"));
+            [...document.querySelectorAll("legend")].forEach(legend => legend.style.color = localStorage.getItem("color"));
+            [...document.querySelectorAll("label")].forEach(label => label.style.color = localStorage.getItem("color"));
+            document.querySelector("h1").style.color = localStorage.getItem("color");
             colorLabel.innerText = localStorage.getItem("color").toUpperCase();
             color.addEventListener('change', (e) => {
                 localStorage.setItem("color", e.target.value);
@@ -105,9 +103,7 @@
                 document.getElementById("number").style.color = e.target.value;
                 document.getElementById("radix").style.color = e.target.value;
                 colorLabel.innerText = e.target.value.toUpperCase();
-                document.getElementById("convertButton").style.background = localStorage.getItem("backgroundColor");
                 document.getElementById("convertButton").style.color = localStorage.getItem("color");
-                document.getElementById("convertButton").style.filter = "contrast(200%)";
             })
             // Text color end
         </script>
