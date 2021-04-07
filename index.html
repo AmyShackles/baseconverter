@@ -115,19 +115,20 @@
             const error = document.getElementById("error");
             const WL = new WasmLoader();
 
-            function check64bit(number) {
-                const max = 2n ** 64n - 1n;
-                return number > max;
-            }
-            function check32bit(number) {
-                const max = 2n ** 32n - 1n;
-                return number > max;
+            function tooLargeForType(number, size) {
+                if (size === 32) {
+                    const max = 2n ** 32n - 1n;
+                    return number > max;
+                } else if (size === 64) {
+                    const max = 2n ** 64n - 1n;
+                    return number > max;
+                }
             }
             function invalidNumber(number, size) {
                 if (size === 32) {
-                    return ((isNumber(number) && (check32bit(number) || +number <= 0)) || isNaN(number));
+                    return ((isNumber(number) && (tooLargeForType(number, 32) || +number <= 0)) || isNaN(number));
                 }
-                return ((isNumber(number) && (check64bit(number) || +number <= 0)) || isNaN(number));
+                return ((isNumber(number) && (tooLargeForType(number, 64) || +number <= 0)) || isNaN(number));
             }
             function isNumber(number) {
                 return !isNaN(number);
@@ -144,7 +145,7 @@
                         if (bigIntSupported) {
                             if (invalidNumber(number)) {
                                 error.textContent = "Could not process request.  ";
-                                if (isNumber(number) && check64bit(number)) {
+                                if (isNumber(number) && tooLargeForType(number, 64)) {
                                     error.textContent += "Number entered must be less than 18446744073709551616.  ";
                                 }
                                 if (isNumber(number) && +number <= 0) {
@@ -191,7 +192,7 @@
                             /* Safari does not support BigInt, so special case to only allow up to 0xFFFFFFFF */
                             if (invalidNumber(number, 32)) {
                                 error.textContent = "Could not process request.  ";
-                                    if (isNumber(number) && check32bit(number)) {
+                                    if (isNumber(number) && tooLargeForType(number, 32)) {
                                         error.textContent += "Number entered must be less than 4294967296.  ";
                                     }
                                     if (isNumber(number) && +number <= 0) {
